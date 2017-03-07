@@ -4,10 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var fs = require('fs')
+var fs = require('fs');
+var expressValidator = require('express-validator');
+var session = require('express-session');
+var flash = require('connect-flash');
+var cors = require('cors')
 var app = express();
-
-//Connection database
 
 
 
@@ -20,8 +22,16 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+//validation
+app.use(expressValidator());
+
+//Session and cookie config
+app.use(cookieParser('keyboard cat'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+app.use(cors({origin: 'http://localhost:8080'}))
 
 // dynamically include routes (Controller)
 fs.readdirSync('./routes').forEach(function (file) {

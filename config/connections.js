@@ -1,7 +1,9 @@
-module.exports.connections = {
+var admin = require('firebase-admin')
+var serviceAccount = require('./api-payu-firebase.json');
 
-    firebase: {
-        serviceAccount: "firebase_keys.json",
-        databaseURL: "https://api-payu.firebaseapp.com"
-    },
-};
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://api-payu.firebaseio.com"
+});
+
+exports.firebase = admin;
